@@ -1,17 +1,21 @@
-# Expo HAS CHANGED
+# Project Context: Expo v57.0.0 (Strict TypeScript)
+Read docs at https://docs.expo.dev/versions/v57.0.0/ if unsure about an API.
 
-Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before writing any code.
+## Architecture & Conventions
+- **Dumb Components:** Keep UI components stateless. Extract complex logic and state management to custom hooks.
+- **Exports:** Use Named Exports exclusively, except for `app/` directory screens which require default exports.
+- **Imports:** Use absolute path aliases (e.g., `@/components/`, `@/hooks/`).
 
-## Test-driven development
+## Mobile Specifics & Navigation
+- **Routing:** Strictly use `expo-router`. Do not manually configure React Navigation.
+- **Safe Areas:** Do NOT blindly wrap screens in `SafeAreaView` if a Stack header is present (to avoid double padding). Prefer using the `useSafeAreaInsets()` hook from `react-native-safe-area-context` for precise layout adjustments.
+- **Keyboards:** Ensure keyboards never obscure `TextInput` fields. Use `KeyboardAvoidingView` (with proper platform-specific `behavior`), `ScrollView`, or keyboard hooks appropriately based on the screen's complexity.
+- **Primitives:** Never use standard HTML tags (div, span). Use only primitive React Native components (View, Text, Pressable).
 
-This project is **TDD-first**. Write a failing test, then the implementation.
-- Use `jest` and `@testing-library/react-native` for all tests.
-- Place test files next to the implementation files with a `.test.tsx` or `.test.ts` extension (e.g. `App.test.tsx` next to `App.tsx`).
-- Ensure all business logic and UI components have tests written BEFORE the actual implementation is developed.
-
-## UI verification
-
-For any UI components, ensure that you write robust snapshot or interaction tests using `@testing-library/react-native` to verify the rendered component tree instead of relying on manual testing.
+## Workflow (TDD-First)
+- Write robust tests using `jest` and `@testing-library/react-native` BEFORE implementation.
+- Include interaction or snapshot tests for all UI components.
+- Co-locate test files (e.g., `Button.test.tsx` next to `Button.tsx`).
 
 ## Pull requests
 

@@ -82,9 +82,10 @@ export function PokemonDetailSheet({ pokemon, onClose }: Props) {
                             paddingBottom: Math.max(insets.bottom, 24),
                         },
                     ]}
+                    {...panHandlers}
                 >
                     {/* Drag Handle */}
-                    <View style={styles.dragHandleContainer} {...panHandlers}>
+                    <View style={styles.dragHandleContainer}>
                         <View style={styles.dragHandle} />
                     </View>
 

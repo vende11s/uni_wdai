@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import type { Pokemon, BattleStats } from '@/types/pokemon';
 
 type Props = {
     pokemon: Pokemon;
     onLoaded: (id: number, types: string[], stats: BattleStats) => void;
+    onPress?: () => void;
 };
 
 type PokemonApiDetail = {
@@ -12,7 +13,7 @@ type PokemonApiDetail = {
     stats: { base_stat: number }[];
 };
 
-export function PokemonCard({ pokemon, onLoaded }: Props) {
+export function PokemonCard({ pokemon, onLoaded, onPress }: Props) {
     useEffect(() => {
         if (pokemon.type.length > 0) return;
 
@@ -43,7 +44,7 @@ export function PokemonCard({ pokemon, onLoaded }: Props) {
     const id_view = String(pokemon.id).padStart(3, '0');
 
     return (
-        <View style={styles.card}>
+        <Pressable style={styles.card} onPress={onPress}>
             <Image source={{ uri: pokemon.image }} style={styles.image} />
             <View>
                 <Text>#{id_view}</Text>
@@ -62,7 +63,7 @@ export function PokemonCard({ pokemon, onLoaded }: Props) {
                 <Text>HP</Text>
                 <Text style={styles.hpText}>{pokemon.battleStats.hp}</Text>
             </View>
-        </View>
+        </Pressable>
     );
 }
 

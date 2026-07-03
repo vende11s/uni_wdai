@@ -75,4 +75,24 @@ describe('PokemonCard', () => {
     expect(screen.getByText('45')).toBeOnTheScreen();
     expect(mockFetch).not.toHaveBeenCalled();
   });
+
+  it('wywoluje onPress po kliknieciu na karte pokemona', async () => {
+    const onPress = jest.fn();
+    const loadedPokemon: Pokemon = {
+      ...mockPokemon,
+      type: ['grass'],
+      battleStats: { hp: 45, atk: 49, def: 49, spd: 45 },
+    };
+
+    await render(
+      <PokemonCard pokemon={loadedPokemon} onLoaded={jest.fn()} onPress={onPress} />
+    );
+
+    const nameText = screen.getByText('bulbasaur');
+    const fireEvent = require('@testing-library/react-native').fireEvent;
+    fireEvent.press(nameText);
+
+    expect(onPress).toHaveBeenCalled();
+  });
 });
+

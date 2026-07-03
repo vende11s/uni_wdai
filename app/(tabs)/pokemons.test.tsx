@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react-native';
+import { create, act } from 'react-test-renderer';
+import { Text } from 'react-native';
 import PokemonsScreen from './pokemons';
 import { usePokemonList } from '@/hooks/usePokemonList';
 
@@ -20,6 +21,19 @@ jest.mock('@/components/pokemonCard', () => {
   };
 });
 
+const hasText = (root: any, text: string) => {
+  return root.findAll((node: any) => {
+    if (node.type === 'Text' || node.type === Text) {
+      return String(node.props.children) === text;
+    }
+    return false;
+  }).length > 0;
+};
+
+const hasTestId = (root: any, id: string) => {
+  return root.findAll((node: any) => node.props.testID === id).length > 0;
+};
+
 describe('PokemonsScreen', () => {
   it('renders a list of pokemons', () => {
     const mockPokemons = [
@@ -33,11 +47,14 @@ describe('PokemonsScreen', () => {
       updatePokemon: jest.fn(),
     });
 
-    render(<PokemonsScreen />);
+    let root: any;
+    act(() => {
+      root = create(<PokemonsScreen />);
+    });
 
-    expect(screen.getByTestId('pokemon-card-1')).toBeTruthy();
-    expect(screen.getByText('bulbasaur')).toBeTruthy();
-    expect(screen.getByTestId('pokemon-card-2')).toBeTruthy();
-    expect(screen.getByText('ivysaur')).toBeTruthy();
+    expect(hasTestId(root.root, 'pokemon-card-1')).toBeTruthy();
+    expect(hasText(root.root, 'bulbasaur')).toBeTruthy();
+    expect(hasTestId(root.root, 'pokemon-card-2')).toBeTruthy();
+    expect(hasText(root.root, 'ivysaur')).toBeTruthy();
   });
 });

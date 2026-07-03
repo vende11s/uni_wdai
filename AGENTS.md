@@ -15,7 +15,6 @@ Read docs at https://docs.expo.dev/versions/v57.0.0/ if unsure about an API.
 ## Workflow (TDD-First)
 - Write robust tests using `jest` and `@testing-library/react-native` BEFORE implementation.
 - Include interaction or snapshot tests for all UI components.
-- Co-locate test files (e.g., `Button.test.tsx` next to `Button.tsx`).
 
 ## Pull requests
 

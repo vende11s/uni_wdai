@@ -29,7 +29,7 @@ It should have these sections:
   
 Format:
 
-- Use the Notion MCP tools to create a new sub-page here: https://app.notion.com/p/Antigravity-MCP-Podsumowania-392fb1a22f5281caa075dca4181dea99 and return the URL of the new subpage.
+- Use the Notion MCP tools to create a new sub-page here: https://app.notion.com/p/Antigravity-MCP-Podsumowania-392fb1a22f5281caa075dca4181dea99 and return the URL of the new subpage. In the title of the subpage there should be the title of the project you have been working on.
 - Please write with the clarity and flow of Martin Kleppmann, making it engaging and written in classic style. Transitions between sections should be smooth.
 - Some tips on diagrams. Ideally, you should pick a small number of diagram families that can be reused throughout the explanation to explain various cases. Make sure to include example data!
 - Use callouts for key concepts or definitions, important edge cases, etc.

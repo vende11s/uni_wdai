@@ -1,84 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, Modal, Pressable, Animated } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, Modal, Pressable } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Pokemon } from '@/types/pokemon';
 import { useBottomSheetAnimation } from '@/hooks/useBottomSheetAnimation';
-
-const TYPE_COLORS: Record<string, string> = {
-    grass: '#48D0B0',
-    fire: '#FB6C6C',
-    water: '#76BDFE',
-    bug: '#A8B820',
-    normal: '#A8A878',
-    poison: '#A040A0',
-    electric: '#FFD86F',
-    ground: '#E0C068',
-    fairy: '#EE99AC',
-    fighting: '#C03028',
-    psychic: '#F85888',
-    rock: '#B8A038',
-    ghost: '#705898',
-    ice: '#98D8D8',
-    dragon: '#7038F8',
-    dark: '#705848',
-    steel: '#B8B8D0',
-    flying: '#A890F0',
-};
+import { PokemonDetailCard } from '@/components/pokemonDetail/pokemonDetailCard'
+import { PokemonDetailStats } from '@/components/pokemonDetail/pokemonDetailStats'
+import { PokemonDetailButton } from '@/components/pokemonDetail/pokemonDetailButton'
 
 type Props = {
     pokemon: Pokemon | null;
     onClose: () => void;
+    onUpdate: (id: number, updates: Partial<Omit<Pokemon, 'id'>>) => void;
+    onRemove?: () => void;
 };
 
-export function PokemonDetailSheet({ pokemon, onClose }: Props) {
+export function PokemonDetailSheet({ pokemon, onClose, onUpdate, onRemove }: Props) {
     const insets = useSafeAreaInsets();
-    const [currentPokemon, setCurrentPokemon] = useState<Pokemon | null>(null);
-
-    // Keep displaying the last selected Pokemon while animating out
-    useEffect(() => {
-        if (pokemon) {
-            setCurrentPokemon(pokemon);
-        }
-    }, [pokemon]);
-
     const visible = !!pokemon;
-    const { translateY, backdropOpacity, panHandlers, closeSheet } = useBottomSheetAnimation(
+    const { animatedBackdropStyle, animatedSheetStyle, panHandlers, closeSheet } = useBottomSheetAnimation(
         visible,
         onClose
     );
-
-    if (!currentPokemon) return null;
-
-    const primaryType = currentPokemon.type[0] || 'normal';
-    const primaryColor = TYPE_COLORS[primaryType.toLowerCase()] || '#a2a2a2';
-
-    const renderStatRow = (label: string, value: number, barColor: string) => {
-        // Stats are capped at 150 for percentage representation
-        const percentage = Math.min((value / 150) * 100, 100);
-        return (
-            <View style={styles.statRow}>
-                <Text style={styles.statLabel}>{label}</Text>
-                <Text style={styles.statValue}>{value}</Text>
-                <View style={styles.progressBarBg}>
-                    <View style={[styles.progressBarFill, { width: `${percentage}%`, backgroundColor: barColor }]} />
-                </View>
-            </View>
-        );
-    };
 
     return (
         <Modal visible={visible} transparent animationType="none" onRequestClose={closeSheet}>
             <View style={styles.overlay}>
                 {/* Backdrop overlay */}
-                <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
+                <Animated.View style={[styles.backdrop, animatedBackdropStyle]} />
                 <Pressable style={StyleSheet.absoluteFill} onPress={closeSheet} />
 
                 {/* Sliding Sheet */}
                 <Animated.View
                     style={[
                         styles.sheet,
+                        animatedSheetStyle,
                         {
-                            transform: [{ translateY }],
                             paddingBottom: Math.max(insets.bottom, 24),
                         },
                     ]}
@@ -89,30 +46,22 @@ export function PokemonDetailSheet({ pokemon, onClose }: Props) {
                         <View style={styles.dragHandle} />
                     </View>
 
-                    {/* Header Card */}
-                    <View style={[styles.header, { backgroundColor: primaryColor }]}>
-                        <Image source={{ uri: currentPokemon.image }} style={styles.image} />
-                        <View style={styles.headerTextContainer}>
-                            <Text style={styles.pokemonId}>#{String(currentPokemon.id).padStart(3, '0')}</Text>
-                            <Text style={styles.pokemonName}>{currentPokemon.name}</Text>
-                            <View style={styles.typesRow}>
-                                {currentPokemon.type.map((t) => (
-                                    <View key={t} style={styles.typeBadge}>
-                                        <Text style={styles.typeText}>{t}</Text>
-                                    </View>
-                                ))}
-                            </View>
-                        </View>
-                    </View>
+                    {pokemon && (
+                        <>
+                            <PokemonDetailCard
+                                pokemon={pokemon}
+                                onUpdate={onUpdate}
+                                style={[{ marginHorizontal: 16 }]}
+                            />
+                            <Text style={styles.descContainer}>{pokemon.description}</Text>
+                            <PokemonDetailStats currentPokemon={pokemon} />
 
-                    {/* Stats List */}
-                    <View style={styles.statsContainer}>
-                        <Text style={styles.sectionTitle}>Base Stats</Text>
-                        {renderStatRow('HP', currentPokemon.battleStats.hp, '#4CAF50')}
-                        {renderStatRow('Attack', currentPokemon.battleStats.atk, '#FF5722')}
-                        {renderStatRow('Defense', currentPokemon.battleStats.def, '#2196F3')}
-                        {renderStatRow('Speed', currentPokemon.battleStats.spd, '#FFC107')}
-                    </View>
+                            <View style={styles.buttonContainer}>
+                                <PokemonDetailButton currentPokemon={pokemon} onUpdate={onUpdate} onRemove={onRemove} />
+                            </View>
+                        </>
+                    )}
+
                 </Animated.View>
             </View>
         </Modal>
@@ -120,12 +69,21 @@ export function PokemonDetailSheet({ pokemon, onClose }: Props) {
 }
 
 const styles = StyleSheet.create({
+    buttonContainer: {
+        marginTop: 15,
+    },
+    descContainer: {
+        margin: 14,
+        marginHorizontal: 18,
+        color: '#4c4c4cff',
+        fontFamily: 'Inter-400'
+    },
     overlay: {
         flex: 1,
         justifyContent: 'flex-end',
     },
     backdrop: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: '#000000',
     },
     sheet: {

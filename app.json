@@ -5,11 +5,20 @@
     "scheme": "gotthemall",
     "version": "1.0.0",
     "orientation": "portrait",
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-splash-screen",
+      "react-native-maps"
+    ],
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "dawaj dostep do aparat ciulu"
+      },
+      "bundleIdentifier": "com.anonymous.gotthemall"
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +28,10 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.gotthemall"
+      "package": "com.anonymous.gotthemall",
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

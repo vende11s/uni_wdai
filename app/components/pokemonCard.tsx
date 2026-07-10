@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import type { Pokemon, BattleStats } from '@/types/pokemon';
+import { TYPE_COLORS, TYPE_COLORS_DESATURATED } from '@/types/pokemon';
+import { TypePill } from '@/components/typePill'
+
 
 type Props = {
     pokemon: Pokemon;
-    onLoaded: (id: number, types: string[], stats: BattleStats) => void;
+    onLoaded: (id: number, updates: Partial<Omit<Pokemon, 'id'>>) => void;
     onPress?: () => void;
 };
 
 type PokemonApiDetail = {
     types: { type: { name: string } }[];
     stats: { base_stat: number }[];
+    height: number;
+    weight: number;
 };
 
 export function PokemonCard({ pokemon, onLoaded, onPress }: Props) {
@@ -22,15 +27,17 @@ export function PokemonCard({ pokemon, onLoaded, onPress }: Props) {
         fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}`, { signal: abortController.signal })
             .then(res => res.json())
             .then((data: PokemonApiDetail) => {
-                onLoaded(
-                    pokemon.id,
-                    data.types.map((t) => t.type.name),
-                    {
+                onLoaded(pokemon.id, {
+                    type: data.types.map((t) => t.type.name),
+                    battleStats: {
                         hp: data.stats[0].base_stat,
                         atk: data.stats[1].base_stat,
                         def: data.stats[2].base_stat,
                         spd: data.stats[5].base_stat,
-                    }
+                    },
+                    height: data.height / 10,
+                    weight: data.weight / 10,
+                }
                 )
             })
             .catch((err) => {
@@ -42,28 +49,34 @@ export function PokemonCard({ pokemon, onLoaded, onPress }: Props) {
     }, [pokemon.id, pokemon.type.length, onLoaded]);
 
     const id_view = String(pokemon.id).padStart(3, '0');
+    const primaryType = pokemon.type[0]?.toLowerCase();
+    const primaryColor = (primaryType && TYPE_COLORS[primaryType] ? TYPE_COLORS[primaryType] : '#6c757d') + '64';
 
     return (
-        <Pressable style={styles.card} onPress={onPress}>
-            <Image source={{ uri: pokemon.image }} style={styles.image} />
-            <View>
-                <Text>#{id_view}</Text>
-                <Text style={styles.name}>{pokemon.name}</Text>
-
-                <View style={styles.typesRow}>
-                    {pokemon.type.map((type) => (
-                        <View key={type} style={styles.pill}>
-                            <Text style={styles.pillText}>{type}</Text>
-                        </View>
-                    ))}
-                </View>
+        <Pressable onPress={onPress}
+            style={({ pressed }) => [
+                styles.card,
+                pressed && styles.cardPressed,
+            ]}>
+            <View style={[styles.imageContainer, { backgroundColor: primaryColor }]}>
+                <Image source={{ uri: pokemon.image }} style={[styles.image]} />
             </View>
+
+            <View>
+                <Text style={styles.num}>#{id_view}</Text>
+                <Text style={styles.name}>{pokemon.name}</Text>
+                <TypePill pokemon={pokemon} size={11}></TypePill>
+
+            </View>
+
+
+            {pokemon.isFav === true && (<Text>tego lubsz</Text>)}
 
             <View style={styles.hpContainer}>
-                <Text>HP</Text>
+                <Text style={styles.hpTextLabel}>HP</Text>
                 <Text style={styles.hpText}>{pokemon.battleStats.hp}</Text>
             </View>
-        </Pressable>
+        </Pressable >
     );
 }
 
@@ -73,18 +86,34 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 12,
         margin: 6,
+        marginLeft: 16,
+        marginRight: 16,
         backgroundColor: '#fbfbfbff',
-        borderRadius: 32,
+        borderRadius: 18,
         flexDirection: 'row',
+        boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.20)',
+    },
+    cardPressed: {
+        opacity: 0.85,
+        transform: [{ scale: 0.96 }],
+    },
+    imageContainer: {
+        width: 64,
+        height: 64,
+        borderRadius: 20,
+        marginRight: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     image: {
-        width: 96,
-        height: 96,
+        width: 80,
+        height: 80,
+        borderRadius: 32,
     },
     name: {
-        marginTop: 4,
-        fontWeight: 'bold',
         textTransform: 'capitalize',
+        fontSize: 16,
+        fontFamily: 'Nunito-900',
     },
     typesRow: {
         flexDirection: 'row',
@@ -93,20 +122,33 @@ const styles = StyleSheet.create({
     },
     pill: {
         backgroundColor: '#6c757d',
-        borderRadius: 12,
+        borderRadius: 10,
         paddingHorizontal: 8,
         paddingVertical: 3,
     },
     pillText: {
         color: 'white',
-        fontSize: 15,
-        textTransform: 'capitalize',
+        fontSize: 12,
+        fontFamily: 'Inter-700',
+        textTransform: 'uppercase',
+        letterSpacing: 1.05,
     },
     hpContainer: {
         marginLeft: 'auto',
     },
     hpText: {
-        fontWeight: 'bold',
-        fontSize: 20,
-    }
+        fontFamily: 'Inter-900',
+        fontSize: 18,
+    },
+    hpTextLabel: {
+        fontFamily: 'Inter-700',
+        fontSize: 12,
+        color: '#666666ff',
+        marginLeft: 'auto',
+    },
+    num: {
+        fontSize: 12,
+        fontFamily: 'Inter-700',
+        color: '#606060ff',
+    },
 });

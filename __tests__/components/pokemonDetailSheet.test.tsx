@@ -1,8 +1,22 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
 import { PokemonDetailSheet } from '@/components/pokemonDetailSheet';
+
+jest.mock('react-native-reanimated', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    __esModule: true,
+    default: {
+      View: React.forwardRef((props: any, ref: any) => <View ref={ref} {...props} />),
+    },
+    useSharedValue: (initial: any) => ({ value: initial }),
+    useAnimatedStyle: (fn: any) => fn(),
+    withSpring: (val: any) => val,
+    withTiming: (val: any) => val,
+  };
+});
 import type { Pokemon } from '@/types/pokemon';
-import { Animated } from 'react-native';
 
 // Mock SafeAreaContext
 jest.mock('react-native-safe-area-context', () => ({
@@ -14,10 +28,9 @@ const mockCloseSheet = jest.fn();
 jest.mock('@/hooks/useBottomSheetAnimation', () => {
   return {
     useBottomSheetAnimation: () => {
-      const { Animated } = require('react-native');
       return {
-        translateY: new Animated.Value(0),
-        backdropOpacity: new Animated.Value(0.5),
+        animatedBackdropStyle: {},
+        animatedSheetStyle: {},
         panHandlers: {},
         closeSheet: mockCloseSheet,
       };
@@ -59,19 +72,19 @@ describe('PokemonDetailSheet', () => {
     expect(screen.getByText('electric')).toBeOnTheScreen();
 
     // Check section header
-    expect(screen.getByText('Base Stats')).toBeOnTheScreen();
+    expect(screen.getByText('BASE STATS')).toBeOnTheScreen();
 
     // Check stats label and value
     expect(screen.getByText('HP')).toBeOnTheScreen();
     expect(screen.getByText('35')).toBeOnTheScreen();
 
-    expect(screen.getByText('Attack')).toBeOnTheScreen();
+    expect(screen.getByText('ATK')).toBeOnTheScreen();
     expect(screen.getByText('55')).toBeOnTheScreen();
 
-    expect(screen.getByText('Defense')).toBeOnTheScreen();
+    expect(screen.getByText('DEF')).toBeOnTheScreen();
     expect(screen.getByText('40')).toBeOnTheScreen();
 
-    expect(screen.getByText('Speed')).toBeOnTheScreen();
+    expect(screen.getByText('SPD')).toBeOnTheScreen();
     expect(screen.getByText('90')).toBeOnTheScreen();
   });
 });

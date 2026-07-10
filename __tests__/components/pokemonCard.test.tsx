@@ -42,17 +42,24 @@ describe('PokemonCard', () => {
           { base_stat: 65 }, // sp.def
           { base_stat: 45 }, // spd
         ],
+        height: 7,
+        weight: 69,
       }),
     });
 
     await render(<PokemonCard pokemon={mockPokemon} onLoaded={onLoaded} />);
 
     await waitFor(() =>
-      expect(onLoaded).toHaveBeenCalledWith(1, ['grass', 'poison'], {
-        hp: 45,
-        atk: 49,
-        def: 49,
-        spd: 45,
+      expect(onLoaded).toHaveBeenCalledWith(1, {
+        type: ['grass', 'poison'],
+        battleStats: {
+          hp: 45,
+          atk: 49,
+          def: 49,
+          spd: 45,
+        },
+        height: 0.7,
+        weight: 6.9,
       }),
     );
     expect(mockFetch).toHaveBeenCalledWith(

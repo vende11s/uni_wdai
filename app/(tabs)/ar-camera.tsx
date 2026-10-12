@@ -177,27 +177,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 50,
-    alignSelf: 'center',
-  },
-  buttonText: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  flipButton: {
-    height: 60,
-    width: 60,
-    backgroundColor: 'rgba(235, 235, 235, 1)',
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    zIndex: 99,
-    elevation: 99,
-    borderRadius: 60,
-  },
   foreheadImage: {
     position: 'absolute',
     zIndex: 10,

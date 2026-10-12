@@ -13,9 +13,9 @@ module.exports = function (api) {
     ]);
   }
 
-  // Vision Camera v5 frame processors i Reanimated 4 używają runtime
-  // `react-native-worklets`, więc kompilujemy worklety jego pluginem.
-  // Musi być ostatni na liście.
+  // Vision Camera v5 frame processors and Reanimated 4 use the
+  // `react-native-worklets` runtime, so we compile worklets with its plugin.
+  // It must be last in the list.
   plugins.push('react-native-worklets-core/plugin');
 
   return {

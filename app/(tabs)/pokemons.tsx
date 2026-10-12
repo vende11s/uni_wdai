@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList, View, Text, Pressable, StyleSheet, ActivityIndicator, RefreshControl } from 'react-native';
 import { usePokemonList } from '@/hooks/usePokemonList';
 import { PokemonCard } from '@/components/pokemonCard';
@@ -10,6 +10,7 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming, useAnimatedScro
 import * as Haptics from 'expo-haptics';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { runOnUIAsync } from 'react-native-worklets';
 
 export default function PokemonsScreen() {
   const { pokemons, fetchMore, updatePokemon, refresh } = usePokemonList();
@@ -27,7 +28,11 @@ export default function PokemonsScreen() {
     opacity: refreshOpacity.value,
   }));
 
-  const triggerRefresh = async () => {
+  useEffect(() => {
+
+  }, [refresh])
+
+  const triggerRefresh = useCallback(async () => {
     if (isRefreshing) return;
     setIsRefreshing(true);
     try {
@@ -40,7 +45,7 @@ export default function PokemonsScreen() {
       new Promise(resolve => setTimeout(resolve, 1000))
     ]);
     setIsRefreshing(false);
-  };
+  }, [refresh]);
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -153,12 +158,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     overflow: 'hidden',
     backgroundColor: 'transparent',
-  },
-  updatingText: {
-    fontFamily: 'Inter-700',
-    color: '#c1211eff',
-    fontSize: 14,
-    fontWeight: 'bold',
   },
   pillWrapper: {
     alignItems: 'flex-start',

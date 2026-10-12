@@ -188,7 +188,7 @@ export const PokemonProvider = ({ children }: { children: React.ReactNode }) => 
         }
     }, [pokemons]);
 
-    // Pobierz pierwszą paczkę przy montowaniu providera
+    // Fetch the first batch when the provider mounts
     useEffect(() => {
         fetchMore();
     }, [fetchMore]);

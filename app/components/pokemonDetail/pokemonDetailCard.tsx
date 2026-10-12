@@ -94,21 +94,9 @@ const styles = StyleSheet.create({
         textTransform: 'capitalize',
         marginBottom: 3,
     },
-    typesRow: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 6,
-    },
-    typeBadge: {
-        backgroundColor: 'rgba(103, 103, 103, 0.25)',
-        borderRadius: 20,
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-    },
-    typeText: {
-        color: '#FFFFFF',
-        fontSize: 14,
-        fontWeight: '600',
-        textTransform: 'capitalize',
-    },
+  typesRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
 });

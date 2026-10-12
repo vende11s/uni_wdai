@@ -115,24 +115,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Nunito-900',
     },
-    typesRow: {
-        flexDirection: 'row',
-        gap: 4,
-        marginTop: 6,
-    },
-    pill: {
-        backgroundColor: '#6c757d',
-        borderRadius: 10,
-        paddingHorizontal: 8,
-        paddingVertical: 3,
-    },
-    pillText: {
-        color: 'white',
-        fontSize: 12,
-        fontFamily: 'Inter-700',
-        textTransform: 'uppercase',
-        letterSpacing: 1.05,
-    },
     hpContainer: {
         marginLeft: 'auto',
     },

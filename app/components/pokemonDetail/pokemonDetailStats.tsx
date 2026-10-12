@@ -35,83 +35,6 @@ export function PokemonDetailStats({ currentPokemon }: Props) {
 
 
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        justifyContent: 'flex-end',
-    },
-    backdrop: {
-        ...StyleSheet.absoluteFill,
-        backgroundColor: '#000000',
-    },
-    sheet: {
-        backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: 32,
-        borderTopRightRadius: 32,
-        shadowColor: '#000000',
-        shadowOffset: { width: 0, height: -4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 12,
-        elevation: 24,
-        overflow: 'hidden',
-    },
-    dragHandleContainer: {
-        width: '100%',
-        height: 32,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'transparent',
-    },
-    dragHandle: {
-        width: 48,
-        height: 6,
-        borderRadius: 3,
-        backgroundColor: '#E0E0E0',
-    },
-    header: {
-        flexDirection: 'row',
-        padding: 24,
-        paddingTop: 12,
-        alignItems: 'center',
-        marginHorizontal: 16,
-        borderRadius: 24,
-    },
-    image: {
-        width: 128,
-        height: 128,
-        marginRight: 16,
-    },
-    headerTextContainer: {
-        flex: 1,
-    },
-    pokemonId: {
-        fontSize: 16,
-        fontWeight: '700',
-        color: 'rgba(67, 67, 67, 0.7)',
-    },
-    pokemonName: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
-        textTransform: 'capitalize',
-        marginBottom: 8,
-    },
-    typesRow: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 6,
-    },
-    typeBadge: {
-        backgroundColor: 'rgba(143, 143, 143, 0.25)',
-        borderRadius: 20,
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-    },
-    typeText: {
-        color: '#FFFFFF',
-        fontSize: 14,
-        fontWeight: '600',
-        textTransform: 'capitalize',
-    },
     statsContainer: {
         padding: 5,
     },
@@ -152,22 +75,5 @@ const styles = StyleSheet.create({
     progressBarFill: {
         height: '100%',
         borderRadius: 4,
-    },
-    addToFav: {
-        width: 300,
-        height: 50,
-        backgroundColor: '#BB271A',
-        borderRadius: 18,
-        marginRight: 'auto',
-        marginLeft: 'auto',
-        marginBottom: 20,
-    },
-    addToFavText: {
-        color: '#f4f4f4ff',
-        textAlign: 'center',
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        fontSize: 20,
-        fontWeight: 'bold',
     },
 });
